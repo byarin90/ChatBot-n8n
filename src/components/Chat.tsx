@@ -232,7 +232,7 @@ export const Chat = () => {
     };
 
     return (
-        <div className="fixed bottom-6 left-6 z-50" dir="rtl">
+        <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 flex flex-col items-end w-full sm:w-auto max-w-full">
             {/* כפתור פתיחת הצ'אט */}
             {!isOpen && (
                 <button
@@ -247,9 +247,9 @@ export const Chat = () => {
 
             {/* חלון הצ'אט */}
             {isOpen && (
-                <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-[420px] h-[600px] flex flex-col overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-2xl border border-slate-200 w-[calc(100vw-1rem)] sm:w-[380px] md:w-[420px] lg:w-[450px] h-[calc(100vh-4rem)] sm:h-[500px] md:h-[600px] max-h-[90vh] flex flex-col overflow-hidden">
                     {/* כותרת */}
-                    <div className="bg-slate-50 border-b border-slate-200 p-4 flex items-center justify-between">
+                    <div className="bg-slate-50 border-b border-slate-200 p-3 sm:p-4 flex items-center justify-between">
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
                                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -275,7 +275,7 @@ export const Chat = () => {
                     </div>
 
                     {/* אזור ההודעות */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-slate-50/30">
+                    <div className="flex-1 overflow-y-auto p-2 sm:p-4 space-y-3 sm:space-y-4 bg-slate-50/30">
                         {messages.map((message) => (
                             <div
                                 key={message.id}
@@ -288,7 +288,11 @@ export const Chat = () => {
                                         ? 'bg-slate-800 text-white'
                                         : 'bg-emerald-100 text-emerald-700 border border-emerald-200'
                                 }`}>
-                                    {message.isUser ? 'Y' : 'AI'}
+                                    {message.isUser ? (
+                                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
+                                        </svg>
+                                    ) : 'AI'}
                                 </div>
                                 <div className={`max-w-[80%] ${
                                     message.isUser ? 'text-right' : 'text-right'
@@ -362,8 +366,8 @@ export const Chat = () => {
                     </div>
 
                     {/* אזור הקלט */}
-                    <div className="p-4 border-t border-slate-200 bg-white">
-                        <div className="flex gap-3 items-end">
+                    <div className="p-2 sm:p-4 border-t border-slate-200 bg-white">
+                        <div className="flex gap-2 sm:gap-3 items-end">
                             <div className="flex-1 relative">
                                 <input
                                     ref={inputRef}
@@ -371,15 +375,15 @@ export const Chat = () => {
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyPress={handleKeyPress}
-                                    placeholder="הקלד הודעה..."
+                                    placeholder="...הקלד הודעה"
                                     disabled={isLoading}
-                                    className="w-full border border-slate-300 hover:border-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 rounded-xl px-4 py-3 text-right disabled:bg-slate-50 disabled:border-slate-200 transition-all duration-200 bg-white text-sm placeholder:text-slate-400 focus:outline-none"
+                                    className="w-full border border-slate-300 hover:border-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-right disabled:bg-slate-50 disabled:border-slate-200 transition-all duration-200 bg-white text-sm placeholder:text-slate-400 focus:outline-none"
                                 />
                             </div>
                             <button
                                 onClick={sendMessage}
                                 disabled={!inputValue.trim() || isLoading}
-                                className="bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 text-white rounded-xl px-4 py-3 transition-colors duration-200 flex-shrink-0 disabled:cursor-not-allowed"
+                                className="bg-slate-800 hover:bg-slate-700 disabled:bg-slate-300 text-white rounded-xl px-3 sm:px-4 py-2 sm:py-3 transition-colors duration-200 flex-shrink-0 disabled:cursor-not-allowed"
                             >
                                 {isLoading ? (
                                     <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>

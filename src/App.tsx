@@ -123,10 +123,7 @@ function App() {
           </div>
         </div>
 
-        {/* הודעה על הצ'אט בוט */}
-        <div className="fixed bottom-20 left-20 bg-blue-600 text-white px-4 py-2 rounded-full text-sm font-medium shadow-lg animate-bounce z-30">
-          💬 שאל אותי על המוצרים!
-        </div>
+
       </div>
       <Chat/>
     </>
