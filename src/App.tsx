@@ -1,5 +1,6 @@
 import './App.css'
 import { Chat } from './components/Chat'
+import LinkButton from './components/LinkButton';
 
 function App() {
   const openWebsite = () => {
@@ -101,7 +102,14 @@ function App() {
                     למידע מפורט על המוצרים שלנו ולקבלת הצעת מחיר, 
                     בקר באתר שלנו או שאל את הצ'אט בוט!
                   </p>
-                  <div className="flex justify-center">
+                  <div dir='rtl' className="flex justify-center flex-col">
+
+                    <LinkButton href="https://yahav-hamias.co.il/" icon="🌐" children="בקר באתר"/>
+                    <LinkButton href="https://yahav-hamias.co.il/" icon="🌐" children="בקר באתר"/>
+                    <LinkButton href="https://yahav-hamias.co.il/" icon="🌐" children="בקר באתר"/>
+                    <LinkButton href="https://yahav-hamias.co.il/" icon="🌐" children="בקר באתר"/>
+                    <LinkButton href="https://yahav-hamias.co.il/" icon="🌐" children="בקר באתר"/>
+                    
                     <button
                       onClick={openWebsite}
                       className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 transform hover:scale-105"

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LinkButton from './LinkButton';
 
 interface TypingAnimationProps {
   text: string;
@@ -133,17 +134,9 @@ export const TypingAnimation: React.FC<TypingAnimationProps> = ({
           const visibleLinkText = (element.linkText || '').slice(0, visibleLength);
           
           renderedElements.push(
-            <a
-              key={element.startIndex}
-              href={element.linkUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 px-3 py-1 rounded-full text-sm font-medium border border-blue-200 hover:border-blue-300 transition-all duration-200 mx-1 shadow-sm hover:shadow-md transform hover:scale-105"
-            >
-              <span>🔗</span>
-              <span>{visibleLinkText}</span>
-              <span className="text-xs opacity-60">↗</span>
-            </a>
+            <LinkButton icon='🔗' key={element.startIndex} href={element.linkUrl || '#'}>
+              {visibleLinkText}
+            </LinkButton>
           );
         }
       }

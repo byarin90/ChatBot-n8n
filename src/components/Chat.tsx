@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ulid } from 'ulid';
 import { TypingAnimation } from './TypingAnimation';
+import LinkButton from './LinkButton';
 
 interface Message {
     id: string;
@@ -37,17 +38,9 @@ const renderTextWithLinks = (text: string) => {
         const linkText = match[1];
         const linkUrl = match[2];
         parts.push(
-            <a
-                key={match.index}
-                href={linkUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1 bg-blue-50 hover:bg-blue-100 text-blue-600 hover:text-blue-700 px-3 py-1 rounded-full text-sm font-medium border border-blue-200 hover:border-blue-300 transition-all duration-200 mx-1 shadow-sm hover:shadow-md transform hover:scale-105"
-            >
-                <span>🔗</span>
-                <span>{linkText}</span>
-                <span className="text-xs opacity-60">↗</span>
-            </a>
+            <LinkButton key={match.index} href={linkUrl} icon='🔗'>
+                {linkText}
+            </LinkButton>
         );
         
         lastIndex = markdownLinkRegex.lastIndex;
@@ -69,17 +62,11 @@ const renderTextWithLinks = (text: string) => {
             
             const url = urlMatch[1];
             urlParts.push(
-                <a
-                    key={`url-${urlMatch.index}`}
-                    href={url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 bg-green-50 hover:bg-green-100 text-green-600 hover:text-green-700 px-2 py-1 rounded-lg text-xs font-medium border border-green-200 hover:border-green-300 transition-all duration-200 mx-1 shadow-sm hover:shadow-md"
-                >
+                <LinkButton key={`url-${urlMatch.index}`} href={url}>
                     <span>🌐</span>
                     <span className="truncate max-w-[150px]">{url.replace(/^https?:\/\//, '')}</span>
                     <span className="text-xs opacity-60">↗</span>
-                </a>
+                </LinkButton>
             );
             
             urlLastIndex = urlRegex.lastIndex;
@@ -250,7 +237,7 @@ export const Chat = () => {
             {!isOpen && (
                 <button
                     onClick={() => setIsOpen(true)}
-                    className="bg-slate-800 hover:bg-slate-700 text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 border border-slate-600"
+                    className="bg-slate-800 cursor-pointer hover:bg-slate-700 text-white rounded-full p-3 shadow-lg hover:shadow-xl transition-all duration-200 border border-slate-600"
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
