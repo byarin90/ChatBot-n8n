@@ -240,14 +240,25 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       message,
     })
 
-    // TODO: Call n8n workflow or OpenAI API to generate response
-    const assistantMessage = '...'
+    // Call n8n workflow (or OpenAI API) to generate a response
+    const workflowResp = await fetch(process.env.N8N_WEBHOOK_URL!, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        organizationId: org.id,
+        sessionId: sid,
+        message,
+      }),
+    })
+    const { reply, tokenUsage } = await workflowResp.json()
+    const assistantMessage = reply
 
     await ChatLog.create({
       sessionId: sid,
       organizationId: org.id,
       role: 'assistant',
       message: assistantMessage,
+      tokenUsage,
     })
 
     return {
