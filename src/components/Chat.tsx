@@ -3,6 +3,8 @@ import { ulid } from 'ulid';
 import { TypingAnimation } from './TypingAnimation';
 import LinkButton from './LinkButton';
 
+// Clean modern chat bubbles without tails - professional look
+
 interface Message {
     id: string;
     text: string;
@@ -22,18 +24,18 @@ const renderTextWithLinks = (text: string) => {
     const markdownLinkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
     // תבנית לזיהוי URLs רגילים
     const urlRegex = /(https?:\/\/[^\s]+)/g;
-    
+
     const parts = [];
     let lastIndex = 0;
     let match;
-    
+
     // עיבוד לינקים בפורמט Markdown
     while ((match = markdownLinkRegex.exec(text)) !== null) {
         // הוספת הטקסט לפני הלינק
         if (match.index > lastIndex) {
             parts.push(text.slice(lastIndex, match.index));
         }
-        
+
         // הוספת הלינק המעוצב
         const linkText = match[1];
         const linkUrl = match[2];
@@ -42,24 +44,24 @@ const renderTextWithLinks = (text: string) => {
                 {linkText}
             </LinkButton>
         );
-        
+
         lastIndex = markdownLinkRegex.lastIndex;
     }
-    
+
     // הוספת שאר הטקסט
     if (lastIndex < text.length) {
         const remainingText = text.slice(lastIndex);
-        
+
         // עיבוד URLs רגילים בשאר הטקסט
         const urlParts = [];
         let urlLastIndex = 0;
         let urlMatch;
-        
+
         while ((urlMatch = urlRegex.exec(remainingText)) !== null) {
             if (urlMatch.index > urlLastIndex) {
                 urlParts.push(remainingText.slice(urlLastIndex, urlMatch.index));
             }
-            
+
             const url = urlMatch[1];
             urlParts.push(
                 <LinkButton key={`url-${urlMatch.index}`} href={url}>
@@ -68,17 +70,17 @@ const renderTextWithLinks = (text: string) => {
                     <span className="text-xs opacity-60">↗</span>
                 </LinkButton>
             );
-            
+
             urlLastIndex = urlRegex.lastIndex;
         }
-        
+
         if (urlLastIndex < remainingText.length) {
             urlParts.push(remainingText.slice(urlLastIndex));
         }
-        
+
         parts.push(...urlParts);
     }
-    
+
     return parts.length > 0 ? parts : [text];
 };
 
@@ -177,15 +179,15 @@ export const Chat = () => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
-                    chatInput: inputValue, 
+                body: JSON.stringify({
+                    chatInput: inputValue,
                     sessionId: sessionId,
-                    action: 'sendMessage' 
+                    action: 'sendMessage'
                 })
             });
 
             console.log('Response status:', response.status);
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -194,7 +196,7 @@ export const Chat = () => {
             console.log('Response data:', data);
 
             // נסה מספר שדות אפשריים לתגובה
-            const botResponseText = data.response || data.message || data.output || data.text || 
+            const botResponseText = data.response || data.message || data.output || data.text ||
                 (typeof data === 'string' ? data : 'מצטער, לא הצלחתי לעבד את ההודעה. נסה שוב.');
 
             const botMessage: Message = {
@@ -232,7 +234,8 @@ export const Chat = () => {
     };
 
     return (
-        <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 flex flex-col items-end w-full sm:w-auto max-w-full">
+        <>
+            <div className="fixed bottom-2 right-2 sm:bottom-4 sm:right-4 z-50 flex flex-col items-end w-full sm:w-auto max-w-full">
             {/* כפתור פתיחת הצ'אט */}
             {!isOpen && (
                 <button
@@ -253,7 +256,7 @@ export const Chat = () => {
                         <div className="flex items-center gap-3">
                             <div className="w-8 h-8 bg-slate-800 rounded-full flex items-center justify-center">
                                 <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1 23l6.71-1.97C9.02 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm2.07-7.75l-.9.92C11.45 10.9 11 11.5 11 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H6c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/>
+                                    <path d="M12 2C6.48 2 2 6.48 2 12c0 1.54.36 2.98.97 4.29L1 23l6.71-1.97C9.02 21.64 10.46 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-2h2v2zm2.07-7.75l-.9.92C11.45 10.9 11 11.5 11 13h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H6c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
                                 </svg>
                             </div>
                             <div>
@@ -279,34 +282,30 @@ export const Chat = () => {
                         {messages.map((message) => (
                             <div
                                 key={message.id}
-                                className={`flex items-start gap-3 ${
-                                    message.isUser ? 'flex-row-reverse' : 'flex-row'
-                                }`}
+                                className={`flex items-start gap-3 ${message.isUser ? 'flex-row-reverse' : 'flex-row'
+                                    }`}
                             >
-                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
-                                    message.isUser
+                                <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${message.isUser
                                         ? 'bg-slate-800 text-white'
                                         : 'bg-emerald-100 text-emerald-700 border border-emerald-200'
-                                }`}>
+                                    }`}>
                                     {message.isUser ? (
                                         <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
                                             <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
                                         </svg>
                                     ) : 'AI'}
                                 </div>
-                                <div className={`max-w-[80%] ${
-                                    message.isUser ? 'text-right' : 'text-right'
-                                }`}>
-                                    <div className={`rounded-2xl px-4 py-3 ${
-                                        message.isUser
-                                            ? 'bg-slate-800 text-white rounded-br-md'
-                                            : 'bg-white text-slate-800 border border-slate-200 rounded-bl-md shadow-sm'
+                                <div className={`max-w-[80%] ${message.isUser ? 'text-right' : 'text-right'
                                     }`}>
-                                        <div 
-                                            className="text-sm leading-relaxed break-words" 
-                                            dir="rtl" 
-                                            style={{ 
-                                                wordBreak: 'break-word', 
+                                    <div className={`relative px-4 py-3 max-w-xs sm:max-w-sm md:max-w-md ${message.isUser
+                                            ? 'bg-slate-800 text-white rounded-[18px] ml-auto'
+                                            : 'bg-white text-slate-800 border border-slate-200 rounded-[18px] shadow-sm mr-auto'
+                                        } ${message.isUser ? 'message-tail-right' : 'message-tail-left'}`}>
+                                        <div
+                                            className="text-sm leading-relaxed break-words"
+                                            dir="rtl"
+                                            style={{
+                                                wordBreak: 'break-word',
                                                 overflowWrap: 'break-word',
                                                 whiteSpace: 'pre-wrap',
                                                 unicodeBidi: 'embed'
@@ -320,9 +319,9 @@ export const Chat = () => {
                                                     speed={30}
                                                     onComplete={() => {
                                                         setTypingMessageId(null);
-                                                        setMessages(prev => 
-                                                            prev.map(msg => 
-                                                                msg.id === message.id 
+                                                        setMessages(prev =>
+                                                            prev.map(msg =>
+                                                                msg.id === message.id
                                                                     ? { ...msg, isTyping: false }
                                                                     : msg
                                                             )
@@ -350,7 +349,7 @@ export const Chat = () => {
                                 <div className="flex-shrink-0 w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center justify-center text-xs font-medium">
                                     AI
                                 </div>
-                                <div className="bg-white rounded-2xl rounded-bl-md px-4 py-3 border border-slate-200 shadow-sm">
+                                <div className="bg-white rounded-[18px] px-4 py-3 border border-slate-200 shadow-sm max-w-xs sm:max-w-sm md:max-w-md mr-auto message-tail-left">
                                     <div className="flex gap-1 items-center">
                                         <div className="flex gap-1">
                                             <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce"></div>
@@ -370,12 +369,13 @@ export const Chat = () => {
                         <div className="flex gap-2 sm:gap-3 items-end">
                             <div className="flex-1 relative">
                                 <input
+                                    dir='rtl'
                                     ref={inputRef}
                                     type="text"
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyPress={handleKeyPress}
-                                    placeholder="...הקלד הודעה"
+                                    placeholder="הקלד הודעה..."
                                     disabled={isLoading}
                                     className="w-full border border-slate-300 hover:border-slate-400 focus:border-slate-500 focus:ring-2 focus:ring-slate-200 rounded-xl px-3 sm:px-4 py-2 sm:py-3 text-right disabled:bg-slate-50 disabled:border-slate-200 transition-all duration-200 bg-white text-sm placeholder:text-slate-400 focus:outline-none"
                                 />
@@ -398,6 +398,7 @@ export const Chat = () => {
                     </div>
                 </div>
             )}
-        </div>
+            </div>
+        </>
     );
 };
